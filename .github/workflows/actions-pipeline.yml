@@ -35,11 +35,11 @@ jobs:
 
       - name: Run Bicep What-If
         run: |
-            az deployment sub create  \
+            az deployment group create  \
               --location ${{ vars.AZURE_LOCATION }} \
               --template-file ./main.bicep \
               --parameters ./main.bicepparam \
-            #   resourceGroupName='${{ vars.AZURE_RESOURCEGROUP_TEST }}'' \
+              resourceGroupName='${{ vars.AZURE_RESOURCEGROUP_TEST }}'' \
               location='${{ vars.AZURE_LOCATION }}'' \
               --what-if
 

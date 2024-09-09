@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-        - '/**'
+        - './**'
   pull_request:
     branches:
       - main
     paths:
-        - '/**'
+        - './**'
   workflow_dispatch:
 
 permissions:
@@ -35,10 +35,12 @@ jobs:
 
       - name: Run Bicep What-If
         run: |
-            az deployment sub create  --location australiaeast \
-              resourceGroupName= ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
-              --parameters \
-              location= ${{ vars.AZURE_LOCATION }} \
+            az deployment sub create  \
+              --location ${{ vars.AZURE_LOCATION }} \
+              --template-file ./main.bicep \
+              --parameters ./main.bicepparam \
+              resourceGroupName='${{ vars.AZURE_RESOURCEGROUP_TEST }}'' \
+              location='${{ vars.AZURE_LOCATION }}'' \
               --mode incremental \
               --what-if
 

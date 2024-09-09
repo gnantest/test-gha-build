@@ -3,12 +3,12 @@ name: 'Test CI/CD Pipeline to demonstrate build and deploy'
 on: 
   push:
     branches: [ "main" ]
-    paths:
-        - './**'
-  pull_request:
-    branches: [ "main" ]
-    paths:
-        - './**'
+#     paths:
+#         - './**'
+#   pull_request:
+#     branches: [ "main" ]
+#     paths:
+#         - './**'
 
 # on:
 #   workflow_dispatch:

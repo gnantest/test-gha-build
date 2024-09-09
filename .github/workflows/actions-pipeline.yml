@@ -11,7 +11,7 @@ on:
       - main
     paths:
         - '/**'
-#   workflow_dispatch:
+  workflow_dispatch:
 
 permissions:
   id-token: write

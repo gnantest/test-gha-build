@@ -2,16 +2,16 @@ name: 'Test CI/CD Pipeline to demonstrate build and deploy'
 
 on: 
   push:
-    branches:
-      - main
+    branches: [ "main" ]
     paths:
         - './**'
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
     paths:
         - './**'
-  workflow_dispatch:
+
+# on:
+#   workflow_dispatch:
 
 permissions:
   id-token: write
@@ -42,11 +42,12 @@ jobs:
               --mode Incremental
             
 
-      - name: Run Bicep create
-        run: |
-            az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \
-              --template-file ./main.bicep \
-              --parameters ./main.bicepparam \
-                location='${{ vars.AZURE_LOCATION }}' \
-              --mode Incremental
+    #   - name: Run Bicep create
+    #     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    #     run: |
+    #         az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \
+    #           --template-file ./main.bicep \
+    #           --parameters ./main.bicepparam \
+    #             location='${{ vars.AZURE_LOCATION }}' \
+    #           --mode Incremental
 

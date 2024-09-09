@@ -41,10 +41,10 @@ jobs:
               --mode Incremental
             
 
-    #   - name: Run Bicep create
-    #     run: |
-    #         az deployment group what-if --resource-group rg-devcenter-prod \
-    #           --template-file ./main.bicep \
-    #           --parameters ./main.bicepparam \
-    #           --mode Incremental
+      - name: Run Bicep create
+        run: |
+            az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \
+              --template-file ./main.bicep \
+              --parameters ./main.bicepparam \
+              --mode Incremental
 

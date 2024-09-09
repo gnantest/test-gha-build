@@ -3,8 +3,8 @@ name: 'Test CI/CD Pipeline to demonstrate build and deploy'
 on: 
   push:
     branches: [ "main" ]
-    paths:  
-        - '**'
+    # paths:  
+    #     - '**'
   pull_request:
     # branches: [ "main" ]
     # paths:

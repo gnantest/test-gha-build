@@ -35,18 +35,16 @@ jobs:
 
       - name: Run Bicep What-If
         run: |
-            # az deployment group what-if  \
-            # #   --location ${{ vars.AZURE_LOCATION }} \
-            #   --resource-group ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
-            #   --template-file ./main.bicep \
-            #   --parameters ./main.bicepparam \
-            #   resourceGroupName='${{ vars.AZURE_RESOURCEGROUP_TEST }}' \
-            # #   location='${{ vars.AZURE_LOCATION }}' \
-
-      - name: Run Bicep What-If
-        run: |
-            az deployment group what-if --resource-group rg-devcenter-prod \
+            az deployment group what-if --resource-group ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
               --template-file ./main.bicep \
               --parameters ./main.bicepparam \
               --mode Incremental
+            
+
+    #   - name: Run Bicep create
+    #     run: |
+    #         az deployment group what-if --resource-group rg-devcenter-prod \
+    #           --template-file ./main.bicep \
+    #           --parameters ./main.bicepparam \
+    #           --mode Incremental
 

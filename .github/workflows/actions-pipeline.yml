@@ -38,7 +38,7 @@ jobs:
             az deployment group what-if --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \
               --template-file ./main.bicep \
               --parameters ./main.bicepparam \
-                locatioin='${{ vars.AZURE_LOCATION }}' \
+                location='${{ vars.AZURE_LOCATION }}' \
               --mode Incremental
             
 
@@ -47,6 +47,6 @@ jobs:
             az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \
               --template-file ./main.bicep \
               --parameters ./main.bicepparam \
-                locatioin='${{ vars.AZURE_LOCATION }}' \
+                location='${{ vars.AZURE_LOCATION }}' \
               --mode Incremental
 

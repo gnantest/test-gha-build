@@ -41,6 +41,5 @@ jobs:
               --parameters ./main.bicepparam \
               resourceGroupName='${{ vars.AZURE_RESOURCEGROUP_TEST }}'' \
               location='${{ vars.AZURE_LOCATION }}'' \
-              --mode incremental \
               --what-if
 

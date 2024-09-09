@@ -1,4 +1,3 @@
-
 @description('Deploy a storage account with cool access tier')
 param storageAccountName string
 

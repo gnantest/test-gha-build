@@ -6,9 +6,9 @@ on:
     paths:  
         - '**'
   pull_request:
-    branches: [ "main" ]
-    paths:
-        - '**'
+    # branches: [ "main" ]
+    # paths:
+    #     - '**'
 
 # on:
 #   workflow_dispatch:

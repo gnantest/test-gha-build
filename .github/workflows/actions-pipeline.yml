@@ -45,7 +45,7 @@ jobs:
 
       - name: Run Bicep What-If
         run: |
-            az deployment group what-if --resource-group manual-deployment-prod-rg \
+            az deployment group what-if --resource-group rg-devcenter-prod \
               --template-file ./main.bicep \
               --parameters ./main.bicepparam \
               --mode Incremental

@@ -1,4 +1,4 @@
 using 'main.bicep'
 
-param storageAccountName = 'gnantest98765'
+param storageAccount = 'gnantest'
 param location = ''

@@ -5,10 +5,12 @@ on:
     branches: [ "main" ]
     paths:  
         - '**'
-#   pull_request:
-#     branches: [ "main" ]
-#     paths:
-#         - './**'
+    # paths-ignore:
+    #     - 'README.md'
+  pull_request:
+    # branches: [ "main" ]
+    # paths:
+    #     - '**'
 
 # on:
 #   workflow_dispatch:
@@ -18,9 +20,67 @@ permissions:
   contents: read
   
 jobs:
-  deploy:
+  Build: 
     runs-on: ubuntu-latest
+
     steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+          with: 
+            fetch-depth: 0
+  
+        - name: Setup Azure CLI
+          uses: azure/login@v1
+          with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  DeployTst:
+    name: Deploy to Test
+    needs: [Build]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with: 
+            fetch-depth: 0
+
+      - name: Setup Azure CLI
+        uses: azure/login@v1
+        with:
+              client-id: ${{ secrets.AZURE_CLIENT_ID }}
+              tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+              subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Run Bicep What-If
+        run: |
+            az deployment group what-if --resource-group ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
+              --template-file ./main.bicep \
+              --parameters ./main.bicepparam \
+                location='${{ vars.AZURE_LOCATION }}' \
+              --mode Incremental
+            
+
+      - name: Run Bicep create
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+            az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
+              --template-file ./main.bicep \
+              --parameters ./main.bicepparam \
+                location='${{ vars.AZURE_LOCATION }}' \
+              --mode Incremental
+
+  DeployProd:
+    name: Deploy to Prod
+    needs: [DeployTst]
+    runs-on: ubuntu-latest
+    environment: 
+      name: Production
+    steps:
+
       - name: Checkout repository
         uses: actions/checkout@v3
         with: 
@@ -29,9 +89,9 @@ jobs:
       - name: Setup Azure CLI
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run Bicep What-If
         run: |
@@ -42,12 +102,11 @@ jobs:
               --mode Incremental
             
 
-    #   - name: Run Bicep create
-    #     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    #     run: |
-    #         az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \
-    #           --template-file ./main.bicep \
-    #           --parameters ./main.bicepparam \
-    #             location='${{ vars.AZURE_LOCATION }}' \
-    #           --mode Incremental
-
+      - name: Run Bicep create
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+            az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \
+              --template-file ./main.bicep \
+              --parameters ./main.bicepparam \
+                location='${{ vars.AZURE_LOCATION }}' \
+              --mode Incremental

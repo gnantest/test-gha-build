@@ -1,8 +1,11 @@
 @description('Deploy a storage account with cool access tier')
-param storageAccountName string
+param storageAccount string
 
 @description('The location for all resources.')
 param location string = 'australiaeast'
+
+var resourceToken = toLower(uniqueString(resourceGroup().id, location))
+var storageAccountName = '${storageAccount}${resourceToken}'
 
 resource stg 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   name: storageAccountName

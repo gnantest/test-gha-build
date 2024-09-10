@@ -48,6 +48,13 @@ jobs:
         with: 
             fetch-depth: 0
 
+      - name: Setup Azure CLI
+        uses: azure/login@v1
+        with:
+              client-id: ${{ secrets.AZURE_CLIENT_ID }}
+              tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+              subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Run Bicep What-If
         run: |
             az deployment group what-if --resource-group ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
@@ -78,7 +85,14 @@ jobs:
         uses: actions/checkout@v3
         with: 
           fetch-depth: 0
-          
+
+      - name: Setup Azure CLI
+        uses: azure/login@v1
+        with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Run Bicep What-If
         run: |
             az deployment group what-if --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \

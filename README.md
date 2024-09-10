@@ -3,5 +3,5 @@ Repo to test GitHub Actions build deploy
 
 # Add GitHub actions
 
-Created a sample github repository.
+Created a sample github repository to test github actions deployments.
 

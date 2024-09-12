@@ -7,15 +7,15 @@ on:
         - '**'
     # paths-ignore:
     #     - 'README.md'
-#   pull_request:
+  pull_request:
 #     branches: [ "main" ]
     # paths:
     #     - '**'
-  workflow_run:
-    workflows: ["Build"]
-    types: [requested]
-    branches:
-      - 'feature/**'
+#   workflow_run:
+#     workflows: ["Build"]
+#     types: [requested]
+#     branches:
+#       - 'feature/**'
 # on:
 #   workflow_dispatch:
 
@@ -25,6 +25,7 @@ permissions:
   
 jobs:
   Build: 
+    if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:

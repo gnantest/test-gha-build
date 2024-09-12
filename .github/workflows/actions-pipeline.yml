@@ -8,7 +8,7 @@ on:
     # paths-ignore:
     #     - 'README.md'
   pull_request:
-    branches: [ "main" ]
+    # branches: [ "main" ]
     # paths:
     #     - '**'
 #   workflow_run:
@@ -42,7 +42,6 @@ jobs:
             subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
         - name: Run Bicep What-If
-          if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
           run: |
                 az deployment group what-if --resource-group ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
                   --template-file ./main.bicep \
@@ -51,6 +50,7 @@ jobs:
                   --mode Incremental
 
   DeployTst:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Deploy to Test
     needs: [Build]
     runs-on: ubuntu-latest
@@ -79,7 +79,7 @@ jobs:
             
 
       - name: Run Bicep create
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
             az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
               --template-file ./main.bicep \
@@ -88,6 +88,7 @@ jobs:
               --mode Incremental
 
   DeployProd:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Deploy to Prod
     needs: [DeployTst]
     runs-on: ubuntu-latest
@@ -117,7 +118,7 @@ jobs:
             
 
       - name: Run Bicep create
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
             az deployment group create --resource-group ${{ vars.AZURE_RESOURCEGROUP_PROD }} \
               --template-file ./main.bicep \

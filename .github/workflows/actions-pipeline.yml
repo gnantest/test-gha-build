@@ -25,7 +25,7 @@ permissions:
   
 jobs:
   Build: 
-    if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
+    
     runs-on: ubuntu-latest
 
     steps:
@@ -42,6 +42,7 @@ jobs:
             subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
         - name: Run Bicep What-If
+          if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
           run: |
                 az deployment group what-if --resource-group ${{ vars.AZURE_RESOURCEGROUP_TEST }} \
                   --template-file ./main.bicep \

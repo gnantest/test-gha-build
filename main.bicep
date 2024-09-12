@@ -5,7 +5,7 @@ param storageAccount string
 param location string = 'australiaeast'
 
 var resourceToken = toLower(uniqueString(resourceGroup().id, location))
-var storageAccountName = '${storageAccount}-${resourceToken}'
+var storageAccountName = '${storageAccount}${resourceToken}'
 
 resource stg 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   name: storageAccountName
